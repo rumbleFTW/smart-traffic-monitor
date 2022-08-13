@@ -1,25 +1,57 @@
 from easyocr import Reader
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import cv2
+import pandas as pd
+import smtplib
+
+
+CAMERA_LOCATION = 'New Town'
+
+def sendMail(mail):
+    message = MIMEMultipart("alternative")
+    message["Subject"] = 'Notification regarding e-challan fine'
+    message["From"] = mail
+    message["To"] = mail
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+
+    body = f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://echallan.parivahan.gov.in/ to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.'
+
+    message.attach(MIMEText(body, "plain"))
+    server.login('smart.traffic.monitor@gmail.com', 'vimtcznlsxshqyrp')
+    server.sendmail('smart.traffic.monitor@gmail.com', mail, message.as_string())
+    server.quit()
+  
+
+database = pd.read_csv('traffic-two-wheeler-monitoring/database.csv')
 
 
 
-database = {'WB08R2567': {'Name': 'Rajdeep Ghosh', 'Address': 'Kolkata', 'Phone': 8240336721},
-            'JK04B8946': {'Name': 'Akash Kotal', 'Address': 'Midnapore', 'Phone': 9382795506}}
-
-
-
-img = cv2.imread('./yolo/runs/detect/exp3/crops/Numberplate/test1.jpg')
+img = cv2.imread('./yolo/runs/detect/exp2/crops/Numberplate/IMG20220811133939.jpg')
 
 reader = Reader(['de'])
 number = reader.readtext(img)
-number = 'JK04B8946'
-
-
-phoneNum = database[number]['Phone']
-
-
-print(f'Message sent to +91 {phoneNum}')
 
 
 
+licensePlate = ""
 
+for i in [0, 1]:
+  for item in number[i]:
+    if type(item) == str:
+      licensePlate += item
+
+licensePlate = licensePlate.replace(' ', '')
+print(f'Licence number is:', licensePlate)
+
+
+for index, plate in enumerate(database['Registration']):
+    if licensePlate == plate:
+        database.at[index, 'Due challan'] += 500
+        mail = database['Email'][index]
+        sendMail(mail)
+        print('Rider successfully notified!')
+        database.to_csv('traffic-two-wheeler-monitoring/database.csv')
