@@ -1,0 +1,7 @@
+path: /content/drive/MyDrive/Codes/data  # dataset root dir
+train: /content/drive/MyDrive/Codes/data/images/train
+val: /content/drive/MyDrive/Codes/data/images/val
+
+# Classes
+nc: 4  # number of classes
+names: ['Helmet', 'No-helmet', 'Motorcycle', 'Numberplate']  # class names
