@@ -30,7 +30,7 @@ database = pd.read_csv('traffic-two-wheeler-monitoring/database.csv')
 
 
 
-img = cv2.imread('./yolo/runs/detect/exp2/crops/Numberplate/IMG20220811133939.jpg')
+img = cv2.imread('traffic-two-wheeler-monitoring/yolo/runs/detect/exp2/crops/Numberplate/IMG20220811133939.jpg')
 
 reader = Reader(['de'])
 number = reader.readtext(img)
