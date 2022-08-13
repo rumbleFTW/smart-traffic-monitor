@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 import cv2
 import pandas as pd
 import smtplib
+import os
 
 
 CAMERA_LOCATION = 'New Town'
@@ -28,30 +29,32 @@ def sendMail(mail):
 
 database = pd.read_csv('traffic-two-wheeler-monitoring/database.csv')
 
+BASE_DIR = 'traffic-two-wheeler-monitoring/yolo/runs/detect/helmetless-riders'
+
+for path in os.listdir(BASE_DIR):
+    img = cv2.imread(os.path.join(BASE_DIR, path))
+
+    reader = Reader(['en'])
+    number = reader.readtext(img)
 
 
-img = cv2.imread('traffic-two-wheeler-monitoring/yolo/runs/detect/exp2/crops/Numberplate/IMG20220811133939.jpg')
 
-reader = Reader(['de'])
-number = reader.readtext(img)
+    licensePlate = ""
 
+    for i in [0, 1]:
+      for item in number[i]:
+        if type(item) == str:
+          licensePlate += item
 
-
-licensePlate = ""
-
-for i in [0, 1]:
-  for item in number[i]:
-    if type(item) == str:
-      licensePlate += item
-
-licensePlate = licensePlate.replace(' ', '')
-print(f'Licence number is:', licensePlate)
+    licensePlate = licensePlate.replace(' ', '')
+    licensePlate = licensePlate.upper()
+    print(f'License number is:', licensePlate)
 
 
-for index, plate in enumerate(database['Registration']):
-    if licensePlate == plate:
-        database.at[index, 'Due challan'] += 500
-        mail = database['Email'][index]
-        sendMail(mail)
-        print('Rider successfully notified!')
-        database.to_csv('traffic-two-wheeler-monitoring/database.csv')
+    for index, plate in enumerate(database['Registration']):
+        if licensePlate == plate:
+            database.at[index, 'Due challan'] += 500
+            mail = database['Email'][index]
+            sendMail(mail)
+            print(f"{database['Name'][index]} successfully notified!")
+            database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
