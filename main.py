@@ -54,7 +54,9 @@ BASE_DIR = 'traffic-two-wheeler-monitoring/yolo/runs/detect/exp/crops/No-helmet'
 if __name__ == '__main__':
 
     for path in os.listdir(BASE_DIR):
-        img = cv2.imread(path.replace('No-helmet', 'Numberplate'))
+        path = os.path.join(BASE_DIR, path).replace('No-helmet', 'Numberplate')
+        print(path)
+        img = cv2.imread(path)
 
         reader = Reader(['en'])
         number = reader.readtext(img)
@@ -73,12 +75,12 @@ if __name__ == '__main__':
         print(f'License number is:', licensePlate)
 
 
-        # for index, plate in enumerate(database['Registration']):
-        #     if licensePlate == plate:
-        #         database.at[index, 'Due challan'] += 500
-        #         mail = database['Email'][index]
-        #         num = database['Phone number'][index]
-        #         sendMail(mail)
-        #         sendSMS(num)
-        #         print(f"{database['Name'][index]} successfully notified!")
-        #         database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
+        for index, plate in enumerate(database['Registration']):
+            if licensePlate == plate:
+                database.at[index, 'Due challan'] += 500
+                mail = database['Email'][index]
+                num = database['Phone number'][index]
+                sendMail(mail)
+                sendSMS(num)
+                print(f"{database['Name'][index]} successfully notified!")
+                database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
