@@ -5,6 +5,25 @@ import cv2
 import pandas as pd
 import smtplib
 import os
+from twilio.rest import Client
+
+
+def sendSMS(number):
+
+    TWILIO_ACCOUNT_SID = 'AC9a24f8d6a167aaa9f8e197b631e02c28'
+    TWILIO_AUTH_TOKEN = '76131d4d4f15c1f9b181632db2b5eaef'
+
+
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+    message = client.messages \
+        .create(
+            body=f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://echallan.parivahan.gov.in/ to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.',
+            from_='+19203455833',
+            to=f'+{number}'
+        )
+
+    print(message.sid)
 
 
 CAMERA_LOCATION = 'New Town'
@@ -29,32 +48,37 @@ def sendMail(mail):
 
 database = pd.read_csv('traffic-two-wheeler-monitoring/database.csv')
 
-BASE_DIR = 'traffic-two-wheeler-monitoring/yolo/runs/detect/helmetless-riders'
-
-for path in os.listdir(BASE_DIR):
-    img = cv2.imread(os.path.join(BASE_DIR, path))
-
-    reader = Reader(['en'])
-    number = reader.readtext(img)
+BASE_DIR = 'traffic-two-wheeler-monitoring/yolo/runs/detect/exp/crops/No-helmet'
 
 
+if __name__ == '__main__':
 
-    licensePlate = ""
+    for path in os.listdir(BASE_DIR):
+        img = cv2.imread(path.replace('No-helmet', 'Numberplate'))
 
-    for i in [0, 1]:
-      for item in number[i]:
-        if type(item) == str:
-          licensePlate += item
-
-    licensePlate = licensePlate.replace(' ', '')
-    licensePlate = licensePlate.upper()
-    print(f'License number is:', licensePlate)
+        reader = Reader(['en'])
+        number = reader.readtext(img)
 
 
-    for index, plate in enumerate(database['Registration']):
-        if licensePlate == plate:
-            database.at[index, 'Due challan'] += 500
-            mail = database['Email'][index]
-            sendMail(mail)
-            print(f"{database['Name'][index]} successfully notified!")
-            database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
+
+        licensePlate = ""
+
+        for i in [0, 1]:
+            for item in number[i]:
+                if type(item) == str:
+                    licensePlate += item
+
+        licensePlate = licensePlate.replace(' ', '')
+        licensePlate = licensePlate.upper()
+        print(f'License number is:', licensePlate)
+
+
+        # for index, plate in enumerate(database['Registration']):
+        #     if licensePlate == plate:
+        #         database.at[index, 'Due challan'] += 500
+        #         mail = database['Email'][index]
+        #         num = database['Phone number'][index]
+        #         sendMail(mail)
+        #         sendSMS(num)
+        #         print(f"{database['Name'][index]} successfully notified!")
+        #         database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
