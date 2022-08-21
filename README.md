@@ -114,6 +114,13 @@ CCTV footage. The actual national vehicle-registration database should
 be used, and an actual e-challan payment gateway should be connected to
 the database.
 
+# **To use the system:**
+- Requirements: All necessary python libraries and dependencies.
+
 ```
-cd yolo && python traffic-monitor.py --source ../data/images/train/IMG20220811133939.jpg --weights 'runs/train/exp/weights/best.pt'  --save-crop && cd .. && python ./main.py 
+git clone https://github.com/rumbleFTW/traffic-two-wheeler-monitoring.git
+cd traffic-two-wheeler-monitoring
+chmod +x ./app.sh
+./app.sh PATH_TO_SOURCE
 ```
+N.B. PATH_TO_SOURCE is the path to the image/video footage to be analyzed.

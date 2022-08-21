@@ -6,6 +6,7 @@ import pandas as pd
 import smtplib
 import os
 from twilio.rest import Client
+import datetime
 
 
 def sendSMS(number):
@@ -18,7 +19,7 @@ def sendSMS(number):
 
     message = client.messages \
         .create(
-            body=f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://echallan.parivahan.gov.in/ to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.',
+            body=f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://bit.ly/3QQxTRO to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.',
             from_='+19203455833',
             to=f'+{number}'
         )
@@ -38,7 +39,7 @@ def sendMail(mail):
     server.starttls()
     server.ehlo()
 
-    body = f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://echallan.parivahan.gov.in/ to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.'
+    body = f'You were caught riding without helmet near {CAMERA_LOCATION}, and were fined Rupees 500. Please visit https://bit.ly/3QQxTRO to pay your due challan. If you are caught riding again without proper gear, you will be severely penalized.'
 
     message.attach(MIMEText(body, "plain"))
     server.login('smart.traffic.monitor@gmail.com', 'vimtcznlsxshqyrp')
@@ -46,12 +47,14 @@ def sendMail(mail):
     server.quit()
   
 
-database = pd.read_csv('traffic-two-wheeler-monitoring/database.csv')
+database = pd.read_csv('database.csv')
 
-BASE_DIR = 'traffic-two-wheeler-monitoring/yolo/runs/detect/exp/crops/No-helmet'
+BASE_DIR = 'yolo/runs/detect/exp/crops/No-helmet'
 
 
 if __name__ == '__main__':
+
+    warnedNums = []
 
     for path in os.listdir(BASE_DIR):
         path = os.path.join(BASE_DIR, path).replace('No-helmet', 'Numberplate')
@@ -74,13 +77,14 @@ if __name__ == '__main__':
         licensePlate = licensePlate.upper()
         print(f'License number is:', licensePlate)
 
-
-        for index, plate in enumerate(database['Registration']):
-            if licensePlate == plate:
-                database.at[index, 'Due challan'] += 500
-                mail = database['Email'][index]
-                num = database['Phone number'][index]
-                sendMail(mail)
-                sendSMS(num)
-                print(f"{database['Name'][index]} successfully notified!")
-                database.to_csv('traffic-two-wheeler-monitoring/database.csv', index=False)
+        if licensePlate not in warnedNums:
+            for index, plate in enumerate(database['Registration']):
+                if licensePlate == plate:
+                    database.at[index, 'Due challan'] += 500
+                    mail = database['Email'][index]
+                    num = database['Phone number'][index]
+                    sendMail(mail)
+                    sendSMS(num)
+                    print(f"{database['Name'][index]} successfully notified!")
+                    warnedNums.append(licensePlate)
+                    database.to_csv('database.csv', index=False)
