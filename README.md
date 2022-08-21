@@ -113,3 +113,7 @@ CCTV cameras, and GPU accelerated servers for real time detection from
 CCTV footage. The actual national vehicle-registration database should
 be used, and an actual e-challan payment gateway should be connected to
 the database.
+
+```
+cd yolo && python traffic-monitor.py --source ../data/images/train/IMG20220811133939.jpg --weights 'runs/train/exp/weights/best.pt'  --save-crop && cd .. && python ./main.py 
+```
