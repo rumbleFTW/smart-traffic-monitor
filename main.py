@@ -7,7 +7,11 @@ import smtplib
 import os
 from twilio.rest import Client
 import datetime
+import geocoder
 
+g = geocoder.ip('me')
+
+CAMERA_LOCATION = g.json['address']+f'. [Lat: {g.lat}, Lng:{g.lng}]'
 
 def sendSMS(number):
 
@@ -25,9 +29,6 @@ def sendSMS(number):
         )
 
     print(message.sid)
-
-
-CAMERA_LOCATION = 'New Town'
 
 def sendMail(mail):
     message = MIMEMultipart("alternative")

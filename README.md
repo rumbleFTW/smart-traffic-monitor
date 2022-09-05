@@ -115,12 +115,13 @@ be used, and an actual e-challan payment gateway should be connected to
 the database.
 
 # **To use the system:**
-- Requirements: All necessary python libraries and dependencies.
+- Requirements: All necessary python libraries mentioned in requirements.txt.
 
 ```
-git clone https://github.com/rumbleFTW/traffic-two-wheeler-monitoring.git
-cd traffic-two-wheeler-monitoring
-chmod +x ./app.sh
-./app.sh PATH_TO_SOURCE
+$ git clone https://github.com/rumbleFTW/traffic-two-wheeler-monitoring.git
+$ cd traffic-two-wheeler-monitoring
+$ pip install -r ./requirements.txt
+$ chmod +x ./app.sh
+$ ./app.sh PATH_TO_SOURCE
 ```
-N.B. PATH_TO_SOURCE is the path to the image/video footage to be analyzed.
+N.B. PATH_TO_SOURCE is the path to the image/video footage to be analyzed. This path will be the relative path of the media with respect to the yolo folder.
