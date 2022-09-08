@@ -80,8 +80,8 @@ if __name__ == '__main__':
                     database.at[index, 'Due challan'] += 500
                     mail = database['Email'][index]
                     num = database['Phone number'][index]
-                    # sendMail(mail)
-                    # sendSMS(num)
+                    sendMail(mail)
+                    sendSMS(num)
                     print(f"{database['Name'][index]} successfully notified!")
                     warnedNums.append(licensePlate)
                     database.to_csv('database.csv', index=False)
