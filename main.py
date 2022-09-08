@@ -59,13 +59,9 @@ if __name__ == '__main__':
 
     for path in os.listdir(BASE_DIR):
         path = os.path.join(BASE_DIR, path).replace('No-helmet', 'Numberplate')
-        print(path)
         img = cv2.imread(path, 0)
         reader = Reader(['en'])
-        number = reader.readtext(img, text_threshold=0.8, contrast_ths=0.8)
-
-
-        print('Raw OCR', number)
+        number = reader.readtext(img, mag_ratio=3)
         licensePlate = ""
 
         for i in [0, 1]:
@@ -84,8 +80,8 @@ if __name__ == '__main__':
                     database.at[index, 'Due challan'] += 500
                     mail = database['Email'][index]
                     num = database['Phone number'][index]
-                    sendMail(mail)
-                    sendSMS(num)
+                    # sendMail(mail)
+                    # sendSMS(num)
                     print(f"{database['Name'][index]} successfully notified!")
                     warnedNums.append(licensePlate)
                     database.to_csv('database.csv', index=False)
