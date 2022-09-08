@@ -6,8 +6,8 @@ import pandas as pd
 import smtplib
 import os
 from twilio.rest import Client
-import datetime
 import geocoder
+import re
 
 g = geocoder.ip('me')
 
@@ -60,13 +60,12 @@ if __name__ == '__main__':
     for path in os.listdir(BASE_DIR):
         path = os.path.join(BASE_DIR, path).replace('No-helmet', 'Numberplate')
         print(path)
-        img = cv2.imread(path)
-
+        img = cv2.imread(path, 0)
         reader = Reader(['en'])
-        number = reader.readtext(img)
+        number = reader.readtext(img, text_threshold=0.8, contrast_ths=0.8)
 
 
-
+        print('Raw OCR', number)
         licensePlate = ""
 
         for i in [0, 1]:
@@ -76,7 +75,8 @@ if __name__ == '__main__':
 
         licensePlate = licensePlate.replace(' ', '')
         licensePlate = licensePlate.upper()
-        print(f'License number is:', licensePlate)
+        licensePlate = re.sub(r'[^a-zA-Z0-9]', '', licensePlate)
+        print('License number is:', licensePlate)
 
         if licensePlate not in warnedNums:
             for index, plate in enumerate(database['Registration']):
