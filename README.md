@@ -31,7 +31,8 @@ roads and the penalty collection system.
 
 ## **Proposed Methodology:**
 
-![](./media/image1.png)
+![image1](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/3c183963-cc4f-427e-a89e-3a6e46373913)
+
 
 <br><br/>
 
@@ -51,10 +52,11 @@ roads and the penalty collection system.
 
 ### **Example detection output:**
 
-![](./media/image2.jpeg) 
-|                                |                                  |
+![image2](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/b231ccca-eda7-4a69-a48d-28a5e7cf2199)       
+#### Crops
+|Number plate|Rider|
 |--------------------------------|----------------------------------|
-|![](./media/image3.jpeg)  |  ![](./media/image4.jpeg)  |
+|![image3](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/4c56d3eb-2596-4e79-8d66-9629b262e7fd) |  ![image4](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/f0eeaf1b-10ed-4ad4-a5c0-ae72d944d8c9) |
 
 <br><br/>
 
@@ -67,7 +69,7 @@ For our project, we used python's EasyOCR library.
 ### **OCR on number plate:**
 
 
-![](./media/image3.jpeg) 
+![image3](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/4c56d3eb-2596-4e79-8d66-9629b262e7fd)
 # ***-> JK04B0946***
 
 <br><br/>
@@ -85,7 +87,7 @@ by him.
 
 |          SMS                   |              E-Mail              |
 |--------------------------------|----------------------------------|
-|![](./media/image5.jpeg)  |  ![](./media/image6.jpeg)  |
+|![image5](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/e264f01f-a1ed-47e4-bb00-983d765eceb5)|![image6](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/b2e90ba2-b4da-4fcc-84d0-55bbe238f921)|
 
 <br><br/>
 
@@ -98,7 +100,8 @@ payment information in a database.
 
 ### **Payment Dashboard of admin:**
 
-![](./media/image7.jpeg)
+![image7](https://github.com/rumbleFTW/smart-traffic-monitor/assets/85807431/1cc50ae6-3edb-40cb-9179-2cab8fb09510)
+
 
 <br><br/>
 
