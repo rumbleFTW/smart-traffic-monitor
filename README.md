@@ -1,5 +1,9 @@
 # **Detection of helmet-less riders in Indian roads using Machine learning**
 
+*  _This project has been published at the [2023 International Conference on Computer Communication and Informatics (ICCCI)](https://ieeexplore.ieee.org/document/10270711) and was awarded the Best paper award!_
+
+* _This software has been copyrighted under the Indian Copyright Act of 1957._ 
+
 <br><br/>
 
 ## **Context:**
